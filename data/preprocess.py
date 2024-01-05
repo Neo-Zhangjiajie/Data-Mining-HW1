@@ -108,3 +108,5 @@ test_file = 'split/test.csv'
 train_set.to_csv(train_file, index=False)
 dev_set.to_csv(dev_file, index=False)
 test_set.to_csv(test_file, index=False)
+
+# 49个特征
