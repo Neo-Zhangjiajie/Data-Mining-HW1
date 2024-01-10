@@ -1,5 +1,6 @@
 from sklearn.svm import SVC  # 导入支持向量分类类
-from sklearn.tree import DecisionTreeClassifier  # 导入决策树分类类
+from sklearn.tree import DecisionTreeClassifier, plot_tree  # 导入决策树分类类
+import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier  # 导入随机森林分类类
 from sklearn.linear_model import LogisticRegression  # 导入逻辑回归类
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score  # 导入分类评估指标
@@ -7,6 +8,7 @@ import numpy as np  # 导入numpy库
 from src.dataset import load_data  # 假设这个函数用于获取数据集
 from src.linear import get_linear_result
 import pandas as pd  # 导入pandas库
+import pdb
 
 # 训练模型的函数不需要改变，只是模型类变了
 from sklearn.metrics import roc_auc_score  # 导入AUC计算函数
@@ -18,8 +20,12 @@ def train_model(X_train, y_train, X_test, y_test, model_class, is_svc=False):
         model = model_class(probability=True)
     else:
         model = model_class()
+        # model = model_class(max_depth=3)
 
     model.fit(X_train, y_train)
+    # plt.figure(figsize=(20,10))  # 设定画布大小
+    # plot_tree(model, filled=True, feature_names=["age","default","balance","housing","loan","day","duration","campaign","pdays","previous","job_admin.","job_blue-collar","job_entrepreneur","job_housemaid","job_management","job_retired","job_self-employed","job_services","job_student","job_technician","job_unemployed","job_unknown","marital_divorced","marital_married","marital_single","education_primary","education_secondary","education_tertiary","education_unknown","contact_cellular","contact_telephone","contact_unknown","month_apr","month_aug","month_dec","month_feb","month_jan","month_jul","month_jun","month_mar","month_may","month_nov","month_oct","month_sep","poutcome_failure","poutcome_other","poutcome_success","poutcome_unknown"], class_names=["No Deposit", "Deposit"], rounded=True)
+    # plt.show()
     y_pred = model.predict(X_test)
     # 用于AUC计算的概率预测
     if is_svc:
@@ -54,7 +60,7 @@ def train():
     # Logistic Regression
     results["Logistic Regression"].extend(train_model(X_train, y_train, X_test, y_test, LogisticRegression))
     '''
-    results["Linear Regression Classification"].extend(get_linear_result(X_train, y_train, X_test, y_test))
+    results["Decision Tree"].extend(train_model(X_train, y_train, X_test, y_test, DecisionTreeClassifier))
     print(results)
     # 将结果转换为DataFrame并打印
     #results_df = pd.DataFrame(results)
